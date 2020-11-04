@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# encrypted file
+data/
+
+# test enviroment
+test.py
