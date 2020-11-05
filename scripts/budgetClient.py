@@ -1,6 +1,8 @@
 from tkinter import *
 import analysis
 import account
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 def loginPage(window, user):
     clearWindow(window)
@@ -66,10 +68,15 @@ def buildHome (window, user) :
 ### TODO
 def viewPage (window, user):
     user.save()
-    clearWindow(window)
-    window.title("View")
-    print(user.getFinDF())
-    window.update()
+    a = analysis.analysis()
+    newWindow = Toplevel(window)
+    bar1 = FigureCanvasTkAgg(a.plot(), newWindow)
+    bar1.get_tk_widget().pack(side = LEFT, fill=BOTH)
+    
+    #clearWindow(window)
+    #window.title("View")
+    #print(user.getFinDF())
+    #window.update()
 
 # creates add page to input financial details
 def addPage (window, fields, user):

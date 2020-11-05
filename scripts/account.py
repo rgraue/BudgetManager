@@ -26,6 +26,7 @@ class account:
             self.__setupUserData__("admin")
 
     def __del__ (self):
+        self.save()
         print("user del")
 
     def setUser (self, userName, password):
@@ -103,6 +104,8 @@ class account:
                         found = True
         if not found:
             print ("FILE NOT FOUND")
+        elif (fileName.endswith("DATA")): 
+            self._finFileName = entry
         #print("DATAFRAME - " + pandasDF)
         return pandasDF, encryptedName
 
@@ -136,9 +139,11 @@ class account:
             f.write(payload)
         try:
             os.remove(oldFile)
-            print("Deleted - " +oldFile)
+            print("Deleted - " + oldFile)
         except:
+            print ("LOKKING FOR -" + oldFile)
             print("NO FILE FOUND TO DELETE")
+        self._finFileName = self._dataPath + encryptedName + ".encrypted"
         return
 
     def save (self):
