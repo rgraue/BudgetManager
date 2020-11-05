@@ -7,17 +7,19 @@ import random
 class account:
     
     def __init__ (self, userName = "", password = ""):
-        self._scriptPath = os.path.dirname(os.path.abspath(__file__))
+        self._absPath = os.path.dirname(os.path.abspath(__file__))
         self._userName = userName
         self._password = password
-        self._homePath = self._scriptPath.replace("\\scripts", "")
-        self._dataPath = self._scriptPath.replace("\\scripts", "\\data\\")
+        self._homePath = self._absPath.split("\\Temp")[0] + "\\Budgetmanager"
+        self._dataPath = self._homePath + "\\data\\"
         self._fields = "Store", "price", "Referrence", "Memo", "date", "card"
         self._categories = "Grocery", "Gas", "Clothes", "Fun", "Alcohol", "Restaurant", "Rent", "Utilities", "Taxes"
         self._finDF = pd.DataFrame()
         self._finFileName = ""
 
     def checkSetup (self):
+        if not os.path.isdir(self._homePath):
+            os.mkdir(self._homePath)
         if os.path.isdir(self._dataPath):
             return
         else:
@@ -116,7 +118,9 @@ class account:
 
     # Returns the fernet key specidfic to users .ssh key
     def __getFernetKey__ (self):
-        with open(".ssh/id_rsa.pub") as f:
+        userFile = self._absPath.split("\\AppData")[0]
+        userFile = userFile + "\\.ssh/id_rsa.pub"
+        with open(userFile) as f:
             data = f.read()
             data = data[8:51] + "="
             data = bytes(data, 'Ascii')
