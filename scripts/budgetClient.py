@@ -7,8 +7,26 @@ def loginPage(window, user):
     fields = "Username", "Password"
     ents = makeform(window, fields)
     Button(window, text = "Submit", command = lambda: retrieveCred(window, ents, user)).pack()
+    Button(window, text = "New User", command = lambda: addUserPage(window, user)).pack()
     return
 
+def addUserPage (window, user):
+    clearWindow(window)
+    fields = "Username", "Password", "Re-enter Password"
+    ents = makeform(window, fields)
+    Button (window, text = "Submit", command = lambda: retrieveUser(window, ents, user)).pack()
+    Button(window, text = "Back", command = lambda: loginPage(window, user)).pack()
+
+def retrieveUser (window, entry, user):
+    credentials = []
+    for i in entry:
+        credentials.append(i[1].get())
+    if (credentials[1] == credentials[2]):
+        user.addUser(credentials[0], credentials[1])
+        loginPage(window, user)
+    else:
+        addUserPage(window, user)
+    
 
 def retrieveCred (window, entry, user):
     credentials = []
@@ -19,11 +37,13 @@ def retrieveCred (window, entry, user):
         buildHome(window, user)
     else:
         print("no user found")
-    return credentials
 
 # Builds home page of budget app
 def buildHome (window, user) :
     clearWindow(window)
+    Button(window,
+    text = "Logout",
+    command = lambda: (loginPage(window, user), user.save())).pack()
     Button(
         window,
         text = "Add Receipt",
@@ -45,9 +65,10 @@ def buildHome (window, user) :
 
 ### TODO
 def viewPage (window, user):
+    user.save()
     clearWindow(window)
     window.title("View")
-    print(user.getFinances())
+    print(user.getFinDF())
     window.update()
 
 # creates add page to input financial details
@@ -90,14 +111,19 @@ def addData (entry, cat, user):
         info.append(i[1].get())
     info.append(cat)
     user.addReceipt(info)
-    print(user.getFinances())
+
+def closeout (user):
+    user.save()
 
 def main() :
 
     window = Tk()
     user = account.account()
+    user.checkSetup()
     loginPage(window, user)
+    window.protocol("WM_DELETE_WINDOW", closeout(user))
     window.mainloop()
+    del user
     
 
 
