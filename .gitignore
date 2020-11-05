@@ -133,3 +133,8 @@ data/
 
 # test enviroment
 test.py
+
+# executable build
+build/
+dist/
+budgetClient.spec
