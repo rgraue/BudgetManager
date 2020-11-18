@@ -3,6 +3,7 @@ from cryptography.fernet import Fernet
 import pandas as pd
 import os
 import random
+from datetime import date
 
 class account:
     
@@ -13,9 +14,10 @@ class account:
         self._homePath = self._absPath.split("\\Temp")[0] + "\\Budgetmanager"
         self._dataPath = self._homePath + "\\data\\"
         self._fields = "Store", "price", "Referrence", "Memo", "date", "card"
-        self._categories = "Grocery", "Gas", "Clothes", "Fun", "Alcohol", "Restaurant", "Rent", "Utilities", "Taxes"
+        self._categories = "Grocery", "Gas", "Clothes", "Fun", "Alcohol", "Restaurant", "Rent", "Utilities", "Taxes", "Other"
         self._finDF = pd.DataFrame()
         self._finFileName = ""
+        self._today = date.today().strftime("%m/%d/%y")
 
     def checkSetup (self):
         if not os.path.isdir(self._homePath):
@@ -64,6 +66,8 @@ class account:
         ID = self.__getUniqueID__()
         while (ID in self._finDF['id']):
             ID = self.__getUniqueID__()
+        if (entry[4] == ""):
+            entry[4] = self._today
         self._finDF = self._finDF.append({"id":ID, "store":entry[0], "price":entry[1], "reference":entry[2],
                             "category":entry[6],"card":entry[5], "date":entry[4], "memo":entry[3]},
                             ignore_index = True)
