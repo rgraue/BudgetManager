@@ -1,7 +1,8 @@
 # BudgetManager
 
-##Author: Ryan Graue
+## Author: Ryan Graue
 
-###Purpose
+### Purpose
+---
 ---
 To learn and implement python GUI using tkinter. As well as python executables, data storage, data encryption, and user credentials.
